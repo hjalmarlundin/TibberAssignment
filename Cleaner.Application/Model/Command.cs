@@ -2,7 +2,7 @@ namespace Cleaner.Application
 {
     public class Command
     {
-        public string direction;
+        public required string direction;
 
         public int steps;
     }

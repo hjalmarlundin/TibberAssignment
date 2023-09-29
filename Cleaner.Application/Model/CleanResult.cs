@@ -2,15 +2,15 @@ namespace Cleaner.Application
 {
     public record CleanResult
     {
-        public int Id;
+        public int Id { get; set; }
 
-        public DateTime timestamp;
+        public DateTime timestamp { get; set; }
 
-        public int commands;
+        public int commands { get; set; }
 
-        public int result;
+        public int result { get; set; }
 
-        public TimeOnly duration;
+        public TimeSpan duration { get; set; }
     }
 
 }

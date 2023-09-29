@@ -2,9 +2,9 @@ namespace Cleaner.Application
 {
     public class Command
     {
-        public required string direction;
+        public required string direction { get; set; }
 
-        public int steps;
+        public int steps { get; set; }
     }
 
 }

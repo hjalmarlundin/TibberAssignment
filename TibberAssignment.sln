@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cleaner.Application", "Clea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cleaner.Application.Tests", "Cleaner.Application.Tests\Cleaner.Application.Tests.csproj", "{51426420-D744-465F-A12F-059F60BDD60A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cleaner.Hosting", "Cleaner.Hosting\Cleaner.Hosting.csproj", "{3989408A-7AEB-4C1B-8DD2-15A929ED8366}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{51426420-D744-465F-A12F-059F60BDD60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51426420-D744-465F-A12F-059F60BDD60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51426420-D744-465F-A12F-059F60BDD60A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3989408A-7AEB-4C1B-8DD2-15A929ED8366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3989408A-7AEB-4C1B-8DD2-15A929ED8366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3989408A-7AEB-4C1B-8DD2-15A929ED8366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3989408A-7AEB-4C1B-8DD2-15A929ED8366}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

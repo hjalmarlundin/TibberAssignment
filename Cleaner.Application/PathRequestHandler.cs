@@ -1,21 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Cleaner.Application
 {
-    public class PathRequestHandler
+    public interface IPathRequestHandler
     {
-        public PathRequestHandler()
+        Task<CleanResult> HandleRequest(CleanRequest request);
+    }
+
+    public class PathRequestHandler : IPathRequestHandler
+    {
+        public Task<CleanResult> HandleRequest(CleanRequest request)
         {
-
-        }
-
-        public CleanResult HandleRequest(CleanRequest request)
-        {
-
+            var timer = Stopwatch.StartNew();
             var result = new CleanResult();
             var office = new Office();
             var start = request.Start;
@@ -27,18 +23,19 @@ namespace Cleaner.Application
                 office.Set(coordinates);
                 start = coordinates.Last();
                 result.commands++;
-
             }
 
             result.result = office.GetCount();
-            return result;
+            result.duration = timer.Elapsed;
+            result.timestamp = DateTime.UtcNow;
+            return Task.FromResult(result);
 
         }
 
         private List<Coordinate> CreateCoordinatesFromCommand(Command command, Coordinate start)
         {
             var coordinates = new List<Coordinate>() { };
-            switch (command.direction)
+            switch (command.direction.ToLower())
             {
                 case "north":
                     for (int i = 1; i <= command.steps; i++)
@@ -69,7 +66,7 @@ namespace Cleaner.Application
                     break;
 
                 default:
-                    throw new Exception($"Command {command} does not exit");
+                    throw new Exception($"Command {command.direction} does not exit");
             }
 
             return coordinates;

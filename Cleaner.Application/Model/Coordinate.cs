@@ -2,9 +2,9 @@ namespace Cleaner.Application
 {
     public record Coordinate
     {
-        public int x;
+        public int x { get; set; }
 
-        public int y;
+        public int y { get; set; }
     }
 
 }

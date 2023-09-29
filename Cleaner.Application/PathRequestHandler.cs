@@ -3,19 +3,10 @@ using Cleaner.Repository;
 
 namespace Cleaner.Application
 {
-    public interface IPathRequestHandler
+    public class PathRequestHandler(IDatabase database) : IPathRequestHandler
     {
-        Task<CleanResult> HandleRequest(CleanRequest request);
-    }
+        private readonly IDatabase database = database;
 
-    public class PathRequestHandler : IPathRequestHandler
-    {
-        private readonly IDatabase database;
-
-        public PathRequestHandler(IDatabase database)
-        {
-            this.database = database;
-        }
         public async Task<CleanResult> HandleRequest(CleanRequest request)
         {
             var timer = Stopwatch.StartNew();
@@ -35,14 +26,13 @@ namespace Cleaner.Application
             result.result = office.GetCount();
             result.duration = timer.Elapsed;
             result.timestamp = DateTime.Now;
-
-            await database.InsertRecord(result.timestamp, result.commands, result.result, result.duration);
+            result.Id = await database.InsertRecord(result.timestamp, result.commands, result.result, result.duration);
 
             return result;
 
         }
 
-        private List<Coordinate> CreateCoordinatesFromCommand(Command command, Coordinate start)
+        private static List<Coordinate> CreateCoordinatesFromCommand(Command command, Coordinate start)
         {
             var coordinates = new List<Coordinate>() { };
             switch (command.direction.ToLower())

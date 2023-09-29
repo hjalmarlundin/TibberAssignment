@@ -1,17 +1,16 @@
-﻿namespace Cleaner.Repository
+﻿using Npgsql;
+
+namespace Cleaner.Repository
 {
-
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Logging;
-    using Npgsql;
-
-    public class Database(ILogger<Database> logger) : IDatabase
+    public class Database(string connectionString) : IDatabase
     {
-        private readonly ILogger<Database> logger = logger;
+        private readonly string connectionString = connectionString;
 
-        public async Task InitializeDb()
+        private bool IsInitialized = false;
+
+        public async Task InitializeDb() // For development purposes..
         {
-            var con = new NpgsqlConnection(connectionString: "Server=localhost;Port=5432;User Id=postgres;Password=password;Database=testdb;");
+            var con = new NpgsqlConnection(connectionString: connectionString);
 
             con.Open();
             using var cmd = new NpgsqlCommand();
@@ -25,11 +24,17 @@
                                 "duration interval," +
                                 "timestamp timestamp)";
             await cmd.ExecuteNonQueryAsync();
+            IsInitialized = true;
         }
 
         public async Task<int> InsertRecord(DateTime timestamp, int commands, int result, TimeSpan duration)
         {
-            var con = new NpgsqlConnection(connectionString: "Server=localhost;Port=5432;User Id=postgres;Password=password;Database=testdb;");
+            if (!IsInitialized)
+            {
+                await InitializeDb();
+            }
+
+            var con = new NpgsqlConnection(connectionString);
 
             con.Open();
             using var cmd = new NpgsqlCommand();
@@ -39,8 +44,8 @@
             cmd.Parameters.AddWithValue("result", result);
             cmd.Parameters.AddWithValue("duration", NpgsqlTypes.NpgsqlDbType.Interval, duration);
             cmd.Parameters.AddWithValue("timestamp", NpgsqlTypes.NpgsqlDbType.Timestamp, timestamp);
-            var id = await cmd.ExecuteScalarAsync() ?? throw new Exception("Could not retrieve ID from data");
-            logger.LogInformation($"New ID {id}");
+            var id = await cmd.ExecuteScalarAsync() ?? throw new Exception("Could not retrieve ID from database");
+
             return (int)id;
         }
 

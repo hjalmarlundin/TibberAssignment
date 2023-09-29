@@ -1,3 +1,4 @@
+using Cleaner.Repository;
 using FluentAssertions;
 
 namespace Cleaner.Application.Tests;
@@ -8,7 +9,7 @@ public class PathRequestHandlerTests
     public async Task NoCommandsShouldAtLeastGiveOneCleanedSpot()
     {
         // Arrange
-        var sut = new PathRequestHandler();
+        var sut = GetSut();
         var request = new CleanRequestBuilder().Build();
 
         // Act
@@ -23,7 +24,7 @@ public class PathRequestHandlerTests
     public async Task ShouldCountAllStepsWithOneCommand()
     {
         // Arrange
-        var sut = new PathRequestHandler();
+        var sut = GetSut();
         var request = new CleanRequestBuilder().WithCommand("east", 4).Build();
 
         // Act
@@ -38,7 +39,7 @@ public class PathRequestHandlerTests
     public async Task ShouldNotCountDoubleIfGoingBackAndForth()
     {
         // Arrange
-        var sut = new PathRequestHandler();
+        var sut = GetSut();
         var request = new CleanRequestBuilder().WithCommand("east", 4).WithCommand("west", 4).Build();
 
         // Act
@@ -53,7 +54,7 @@ public class PathRequestHandlerTests
     public async Task ShouldCountIfChangingDirection()
     {
         // Arrange
-        var sut = new PathRequestHandler();
+        var sut = GetSut();
         var request = new CleanRequestBuilder().WithCommand("east", 4).WithCommand("north", 4).Build();
 
         // Act
@@ -62,5 +63,11 @@ public class PathRequestHandlerTests
         // Assert
         result.commands.Should().Be(2);
         result.result.Should().Be(9);
+    }
+
+    private static PathRequestHandler GetSut()
+    {
+        var database = new Moq.Mock<IDatabase>();
+        return new PathRequestHandler(database.Object);
     }
 }

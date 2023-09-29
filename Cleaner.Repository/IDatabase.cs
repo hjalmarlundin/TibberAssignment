@@ -8,6 +8,5 @@ namespace Cleaner.Repository
         Task InitializeDb();
 
         Task<int> InsertRecord(DateTime timestamp, int commands, int result, TimeSpan duration);
-
     }
 }

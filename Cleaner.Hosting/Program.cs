@@ -10,7 +10,10 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 builder.Services.AddTransient<IPathRequestHandler, PathRequestHandler>();
-builder.Services.AddTransient<IDatabase, Database>();
+
+var connectionString = builder.Configuration.GetConnectionString("DbContext") ?? throw new Exception("Could not find database configuration");
+builder.Services.AddSingleton<IDatabase, Database>(x => new Database(connectionString));
+Console.WriteLine($"Using connection: {connectionString}");
 
 
 var app = builder.Build();

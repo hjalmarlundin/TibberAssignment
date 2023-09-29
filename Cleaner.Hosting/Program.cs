@@ -1,4 +1,5 @@
 using Cleaner.Application;
+using Cleaner.Repository;
 using Swashbuckle.AspNetCore.Filters;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 builder.Services.AddTransient<IPathRequestHandler, PathRequestHandler>();
+builder.Services.AddTransient<IDatabase, Database>();
+
 
 var app = builder.Build();
 
@@ -22,6 +25,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
+
+
 
 
 

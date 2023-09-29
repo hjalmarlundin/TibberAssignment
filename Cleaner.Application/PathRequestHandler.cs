@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Cleaner.Repository;
 
 namespace Cleaner.Application
 {
@@ -9,7 +10,13 @@ namespace Cleaner.Application
 
     public class PathRequestHandler : IPathRequestHandler
     {
-        public Task<CleanResult> HandleRequest(CleanRequest request)
+        private readonly IDatabase database;
+
+        public PathRequestHandler(IDatabase database)
+        {
+            this.database = database;
+        }
+        public async Task<CleanResult> HandleRequest(CleanRequest request)
         {
             var timer = Stopwatch.StartNew();
             var result = new CleanResult();
@@ -27,8 +34,11 @@ namespace Cleaner.Application
 
             result.result = office.GetCount();
             result.duration = timer.Elapsed;
-            result.timestamp = DateTime.UtcNow;
-            return Task.FromResult(result);
+            result.timestamp = DateTime.Now;
+
+            await database.InsertRecord(result.timestamp, result.commands, result.result, result.duration);
+
+            return result;
 
         }
 

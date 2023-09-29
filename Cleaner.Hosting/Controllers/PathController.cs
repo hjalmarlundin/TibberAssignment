@@ -25,6 +25,7 @@ namespace Cleaner.Hosting.Controllers
             logger.LogInformation($"{request.Start}, {string.Join(", ", request.Commands.Select(x => $"{x.direction} - {x.steps}"))}");
 
             var result = await requestHandler.HandleRequest(request);
+            logger.LogInformation($"Result: {result}");
             return CreatedAtAction(nameof(EnterPath), result);
         }
 

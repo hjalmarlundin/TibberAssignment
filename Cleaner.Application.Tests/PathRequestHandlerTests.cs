@@ -5,14 +5,14 @@ namespace Cleaner.Application.Tests;
 public class PathRequestHandlerTests
 {
     [Fact]
-    public void NoCommandsShouldAtLeastGiveOneCleanedSpot()
+    public async Task NoCommandsShouldAtLeastGiveOneCleanedSpot()
     {
         // Arrange
         var sut = new PathRequestHandler();
         var request = new CleanRequestBuilder().Build();
 
         // Act
-        var result = sut.HandleRequest(request);
+        var result = await sut.HandleRequest(request);
 
         // Assert
         result.commands.Should().Be(0);
@@ -20,14 +20,14 @@ public class PathRequestHandlerTests
     }
 
     [Fact]
-    public void ShouldCountAllStepsWithOneCommand()
+    public async Task ShouldCountAllStepsWithOneCommand()
     {
         // Arrange
         var sut = new PathRequestHandler();
         var request = new CleanRequestBuilder().WithCommand("east", 4).Build();
 
         // Act
-        var result = sut.HandleRequest(request);
+        var result = await sut.HandleRequest(request);
 
         // Assert
         result.commands.Should().Be(1);
@@ -35,14 +35,14 @@ public class PathRequestHandlerTests
     }
 
     [Fact]
-    public void ShouldNotCountDoubleIfGoingBackAndForth()
+    public async Task ShouldNotCountDoubleIfGoingBackAndForth()
     {
         // Arrange
         var sut = new PathRequestHandler();
         var request = new CleanRequestBuilder().WithCommand("east", 4).WithCommand("west", 4).Build();
 
         // Act
-        var result = sut.HandleRequest(request);
+        var result = await sut.HandleRequest(request);
 
         // Assert
         result.commands.Should().Be(2);
@@ -50,14 +50,14 @@ public class PathRequestHandlerTests
     }
 
     [Fact]
-    public void ShouldCountIfChangingDirection()
+    public async Task ShouldCountIfChangingDirection()
     {
         // Arrange
         var sut = new PathRequestHandler();
         var request = new CleanRequestBuilder().WithCommand("east", 4).WithCommand("north", 4).Build();
 
         // Act
-        var result = sut.HandleRequest(request);
+        var result = await sut.HandleRequest(request);
 
         // Assert
         result.commands.Should().Be(2);
